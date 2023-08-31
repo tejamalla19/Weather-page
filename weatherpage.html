@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Weather Web Page</title>
+        <style>
+            body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav {
+            background-color: #55b9e8;
+            color: white;
+            padding: 10px;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: white;
+            margin: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 50px;
+            background-color: #f2f2f2;
+        }
+        
+        .weather-info {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .weather-info .input-container {
+            margin-bottom: 20px;
+        }
+        
+        .weather-info label, .weather-info input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        
+        .weather-info button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        #city{
+            width: 30%;
+            margin-left: 35%;
+            
+        }
+        #getdetails{
+            font-family: cursive;
+            font-size: 25px;
+            color: #000000;
+  
+            margin-left: 40%;
+            font-weight: bold;
+            
+        }
+        
+        </style>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Weather</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>Weather Forecast</h1>
+            <p>Check the current weather in your city!</p>
+        </header>
+        <section class="weather-info">
+            <h2>Weather Information</h2>
+            <div class="input-container">
+                <label for="city">City:-</label>
+                <input type="text" id="city" name="city" required placeholder="Enter City Name">
+            </div>
+            <button id="submit">Get Weather</button>
+        </section>
+        <div id="getdetails">
+            <label id="name"></label>
+            <br>
+            <br>
+            <label id="region"></label>
+            <br>
+            <br>
+            <label id="country"></label>
+            <br>
+            <br>
+            <label id="temp_c"></label>
+            <br>
+            <br>
+            <label id="feelslike_c"></label>
+            <br>
+            <br>
+            <label id="text"></label>
+            <br>
+            <br>
+            <label id="humidity"></label>
+            <br>
+            <br>
+            <label id="wind_kph"></label>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#submit');
+    const getDetails = document.getElementById('getdetails'); // Get the div for displaying details
+
+    form.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const city = document.getElementById('city').value;
+        const apiKey = '73987dd9b513410492a72102232905'; // Replace with your actual API key
+        const apiUrl = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+
+        fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    alert(`City not found: ${city}`);
+                } else {
+                    // Extract the data from the API response
+                    const name =        `City:-     ${data.location.name}`;
+                    const region =      `Region:-   ${data.location.region}`;
+                    const country =     `Country:-  ${data.location.country}`;
+                    const temp_c =      `Temperature:- ${data.current.temp_c}°C`;
+                    const feelslike_c = `Feels like:-   ${data.current.feelslike_c}°C`;
+                    const text =        `Condition:-   ${data.current.condition.text}`;
+                    const humidity =    `Humidity:-    ${data.current.humidity}%`;
+                    const wind_kph =    `Wind Speed:-  ${data.current.wind_kph}kmph`;
+
+                    // Set the labels with the extracted data
+                    document.getElementById('name').textContent = name;
+                    document.getElementById('region').textContent = region;
+                    document.getElementById('country').textContent = country;
+                    document.getElementById('temp_c').textContent = temp_c;
+                    document.getElementById('feelslike_c').textContent = feelslike_c;
+                    document.getElementById('text').textContent = text;
+                    document.getElementById('humidity').textContent = humidity;
+                    document.getElementById('wind_kph').textContent = wind_kph;
+                    // Display the details div
+                    getDetails.style.display = 'block';
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+
+        document.getElementById('city').value = '';
+    });
+});
+        </script>
+    </body>
+</html>
